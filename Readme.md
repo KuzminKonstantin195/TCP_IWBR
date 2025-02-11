@@ -1,51 +1,12 @@
-# First Level Heading
+* * * *
+# TCP_IWBR
+* * * *
+### ОПИСАНИЕ ПРОЕКТА
+***"TCP_IWBR"*** задумывается как инструмент для более удобной настройки связи клиент-сервер
+по протоколу TCP с использованием инструментов фреймворка Qt   
+**Проект должен:**  
+1. Максимально совпадать по синтаксису с оригинальными классами Qt Network (QTcpClient и QTcpServer);
+2. Поддерживать прием/отправку тектов и файлов разных форматов;
+3. Многопоточность: прием и отправка файлов должны производиться в отдельных потоках и не блокировать основную программу;
+4. Серверная часть должна поддерживать несколько соединений одновременно;
 
-Paragraph.
-
-## Second Level Heading
-
-Paragraph.
-
-- bullet
-+ other bullet
-* another bullet
-    * child bullet
-
-1. ordered
-2. next ordered
-
-### Third Level Heading
-
-Some *italic* and **bold** text and `inline code`.
-
-An empty line starts a new paragraph.
-
-Use two spaces at the end  
-to force a line break.
-
-A horizontal ruler follows:
-
----
-
-Add links inline like [this link to the Qt homepage](https://www.qt.io),
-or with a reference like [this other link to the Qt homepage][1].
-
-    Add code blocks with
-    four spaces at the front.
-
-> A blockquote
-> starts with >
->
-> and has the same paragraph rules as normal text.
-
-First Level Heading in Alternate Style
-======================================
-
-Paragraph.
-
-Second Level Heading in Alternate Style
----------------------------------------
-
-Paragraph.
-
-[1]: https://www.qt.io
