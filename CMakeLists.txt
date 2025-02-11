@@ -16,6 +16,7 @@ add_executable(TCP_IWBR
   main.cpp
   Readme.md
   all_headers.h
+  iwbr_tcpclient.h iwbr_tcpclient.cpp
 )
 target_link_libraries (TCP_IWBR
     Qt${QT_VERSION_MAJOR}::Core
