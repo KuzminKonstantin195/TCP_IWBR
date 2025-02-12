@@ -1,8 +1,6 @@
 #ifndef IWBR_TCPCLIENT_H
 #define IWBR_TCPCLIENT_H
 
-
-
 /*
  * IWBR_TCPClient - клиент простокола TCP IP
  *
