@@ -16,5 +16,6 @@
 #include <memory>
 #include <thread>
 #include <mutex>
+#include <stack>
 
 #endif // ALL_HEADERS_H

@@ -14,6 +14,7 @@
 
 #pragma once
 #include "all_headers.h"
+
 using namespace std;
 
 class IWBR_TCPClient
@@ -29,6 +30,8 @@ private:
     bool connect_status;                                    // статус соединения (0 - не подключен, 1 - есть соединение)            статус:
     bool transaction_status;                                // статус наличия активных процессов передачи данных                    статус:
 
+    stack <QByteArray> messages_stack;                      // возможно понадобится использование стэка сообщений
+    bool stack_used;                                        // флаг, будет ли использоваться стэк
 public:
 
     IWBR_TCPClient(quint16 id, QString server_ip);          //                                                                      статус:
@@ -52,23 +55,25 @@ public:
     bool get_connect_status ();                             // получить статус подключения                                          статус:
     bool get_transaction_status ();                         // получить статус наличия активных транзакций                          статус:
 
-    template <typename format>
-    format get_last_message (quint16 socket_num);           // получить последнее принятое сообщение от выбранного сокета           статус:
+    bool get_stack_used_status ();                          // получить статус использования стэка сообщений                        статус:
+    void set_stack_used_status (bool state);                // установить статус использования тега сообщений                       статус:
 signals:
     int message_read_start ();                              // сигнал о начале приема сообщения (возвращает номер сокета)           статус:
     int message_read_end ();                                // сигнал о том, что прием сообщений завершен (возвращает номер сокета) статус:
 
 private slots:
-
+    template <typename retFormat>
+    retFormat get_last_message (quint16 socket_num);        // получить последнее принятое сообщение от выбранного сокета           статус:
 
 public slots:
     //void ready_read ();
+
 
 public:
     enum errors_code
     {
         send_error = 1,
-        read_error = 2
+        read_error
     };
 };
 
