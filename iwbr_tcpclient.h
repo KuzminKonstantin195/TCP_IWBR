@@ -15,27 +15,32 @@
 
 using namespace std;
 
-class IWBR_TCPClient
+class IWBR_TCPClient : public QObject
 {
+    Q_OBJECT
+
 private:
     quint16 id;                                             // id клиента                                                           статус:
     QString server_ip;                                      // ip-адрес сервера                                                     статус:
+    quint16 port_base;
 
-    QTcpSocket *_sockets [3];                               // исполняющие сокеты (каждый ответственен за свой формат данных)       статус:
+    QTcpSocket* _sockets [3];                               // исполняющие сокеты (каждый ответственен за свой формат данных)       статус:
 
-    QVector<shared_ptr<thread>> threads;                    // хранилище потоков                                                    статус:
+   // bool TextSocket_connect_status ();
 
-    bool connect_status;                                    // статус соединения (0 - не подключен, 1 - есть соединение)            статус:
+    QVector<shared_ptr<std::thread>> threads;                    // хранилище потоков                                                    статус:
+
+    bool connect_status[3];                                 // статус соединения (0 - не подключен, 1 - есть соединение)            статус:
     bool transaction_status;                                // статус наличия активных процессов передачи данных                    статус:
 
-    stack <QByteArray> messages_stack;                      // возможно понадобится использование стэка сообщений
-    bool stack_used;                                        // флаг, будет ли использоваться стэк
+    //stack <QByteArray> messages_stack;                      // возможно понадобится использование стэка сообщений
+    //bool stack_used;                                        // флаг, будет ли использоваться стэк
 public:
 
-    IWBR_TCPClient(quint16 id, QString server_ip);          //                                                                      статус:
+    IWBR_TCPClient(quint16 id);                             //                                                                      статус:
     ~IWBR_TCPClient();                                      //                                                                      статус:
 
-    bool connect_to_host ();                                // подключиться к серверу                                               статус:
+    bool connect_to_host (QString server_ip, quint16 port); // подключиться к серверу                                               статус:
     bool disconnect_from_host ();                           // отключиться от сервера                                               статус:
 
     bool send_text  (QString text);                         // отправка текста                                                      статус:
@@ -50,7 +55,7 @@ public:
     QString get_server_ip ();                               // получить текущий ip сервера                                          статус:
     void set_server_ip (QString new_ip);                    // установить новый ip сервера (потребуется отключиться)                статус:
 
-    bool get_connect_status ();                             // получить статус подключения                                          статус:
+    bool get_connect_status ();                             // получить статус подключения                                          статус: готово
     bool get_transaction_status ();                         // получить статус наличия активных транзакций                          статус:
 
     bool get_stack_used_status ();                          // получить статус использования стэка сообщений                        статус:
@@ -60,9 +65,11 @@ signals:
     int message_read_end ();                                // сигнал о том, что прием сообщений завершен (возвращает номер сокета) статус:
 
 private slots:
-    template <typename retFormat>
-    retFormat get_last_message (quint16 socket_num);        // получить последнее принятое сообщение от выбранного сокета           статус:
+    //template <typename retFormat>
+    //retFormat get_last_message (quint16 socket_num);        // получить последнее принятое сообщение от выбранного сокета         статус:
 
+    void socket_connected (quint8 num);                     // реация на соединения сокета                                          статус: готово
+    void socket_disconnected (quint8 num);                  // реакция на дисконнект сокета                                         статус: готово
 public slots:
     //void ready_read ();
 
