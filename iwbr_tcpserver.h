@@ -15,7 +15,7 @@ using namespace std;
 
 struct client;   // структура будет хранить инфу о самом клиенте, о его каналах связи
 
-class IWBR_TCPServer
+class IWBR_TcpServer
 {
 private:
     QTcpServer *_server_obj;                                                // исполняющий объект QTcpServer
@@ -24,8 +24,8 @@ private:
     QString server_ip;                                                      // ip сервера
 
 public:
-    IWBR_TCPServer();                                                       //                                                          статус:
-    ~IWBR_TCPServer();                                                      //                                                          статус:
+    IWBR_TcpServer();                                                       //                                                          статус:
+    ~IWBR_TcpServer();                                                      //                                                          статус:
 
     QString get_ip ();                                                      // получить информацию об ip-сервера                        статус:
 

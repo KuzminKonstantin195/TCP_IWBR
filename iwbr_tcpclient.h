@@ -13,69 +13,74 @@
 #pragma once
 #include "all_headers.h"
 
-using namespace std;
+//using namespace std;
 
-class IWBR_TCPClient : public QObject
+class IWBR_TcpClient : public QObject
 {
     Q_OBJECT
 
 private:
     quint16 id;                                             // id клиента                                                           статус:
-    QString server_ip;                                      // ip-адрес сервера                                                     статус:
-    quint16 port_base;
+    QString serverIP;                                       // ip-адрес сервера                                                     статус:
+    quint16 portBase;
 
-    QTcpSocket* _sockets [3];                               // исполняющие сокеты (каждый ответственен за свой формат данных)       статус:
+
+
+    shared_ptr<QTcpSocket> _sockets [3];                    // исполняющие сокеты (каждый ответственен за свой формат данных)       статус:
 
    // bool TextSocket_connect_status ();
 
-    QVector<shared_ptr<std::thread>> threads;                    // хранилище потоков                                                    статус:
+    QVector<shared_ptr<std::thread>> threads;               // хранилище потоков                                                    статус:
+    mutex mtx;
 
-    bool connect_status[3];                                 // статус соединения (0 - не подключен, 1 - есть соединение)            статус:
-    bool transaction_status;                                // статус наличия активных процессов передачи данных                    статус:
+    bool connectStatus[3];                                  // статус соединения (0 - не подключен, 1 - есть соединение)            статус:
+    bool transactionStatus;                                 // статус наличия активных процессов передачи данных                    статус:
 
     //stack <QByteArray> messages_stack;                      // возможно понадобится использование стэка сообщений
     //bool stack_used;                                        // флаг, будет ли использоваться стэк
+
 public:
 
-    IWBR_TCPClient(quint16 id);                             //                                                                      статус:
-    ~IWBR_TCPClient();                                      //                                                                      статус:
+    IWBR_TcpClient(quint16 id);                             //                                                                      статус:
+    ~IWBR_TcpClient();                                      //                                                                      статус:
 
-    bool connect_to_host (QString server_ip, quint16 port); // подключиться к серверу                                               статус:
-    bool disconnect_from_host ();                           // отключиться от сервера                                               статус:
+    bool connectToHost (QString ip, quint16 port);          // подключиться к серверу                                               статус: есть
+    bool disconnectFromHost ();                             // отключиться от сервера                                               статус: есть
 
-    bool send_text  (QString text);                         // отправка текста                                                      статус:
-    bool send_bytes (QByteArray bytes);                     // отправка байтовой                                                    статус:
-    bool send_file  (QString file_name);                    // отправка файла                                                       статус:
+    bool sendText  (QString text);                          // отправка текста                                                      статус:
+    bool sendBytes (QByteArray bytes);                      // отправка байтовой                                                    статус:
+    bool sendFile  (QString file_name);                     // отправка файла                                                       статус:
 
-    bool stop_sending ();                                   // принудительная остановка активных отправлений                        статус:
+    bool stopSending ();                                    // принудительная остановка активных отправлений                        статус:
 
-    quint16 get_id ();                                      // получить текущий id клиента                                          статус:
-    void set_id (quint16 new_id);                           // установить ноывй id                                                  статус:
+    quint16 getID ();                                       // получить текущий id клиента                                          статус: готово
+    void setID (quint16 new_id);                            // установить ноывй id                                                  статус: есть
 
-    QString get_server_ip ();                               // получить текущий ip сервера                                          статус:
-    void set_server_ip (QString new_ip);                    // установить новый ip сервера (потребуется отключиться)                статус:
+    QString getServerIP ();                                 // получить текущий ip сервера                                          статус: готово
+    void setServerIP (QString new_ip);                      // установить новый ip сервера (потребуется отключиться)                статус: готово
 
-    bool get_connect_status ();                             // получить статус подключения                                          статус: готово
-    bool get_transaction_status ();                         // получить статус наличия активных транзакций                          статус:
+    bool getConnectStatus ();                               // получить статус подключения                                          статус: готово
+    bool getTransactionStatus ();                           // получить статус наличия активных транзакций                          статус:
 
-    bool get_stack_used_status ();                          // получить статус использования стэка сообщений                        статус:
-    void set_stack_used_status (bool state);                // установить статус использования тега сообщений                       статус:
+    //bool getStackUsedStatus ();                             // получить статус использования стэка сообщений                        статус:
+    //void setStackUsedStatus (bool state);                   // установить статус использования тега сообщений                       статус:
+
 signals:
-    int message_read_start ();                              // сигнал о начале приема сообщения (возвращает номер сокета)           статус:
-    int message_read_end ();                                // сигнал о том, что прием сообщений завершен (возвращает номер сокета) статус:
+    int messageReadStart ();                                // сигнал о начале приема сообщения (возвращает номер сокета)           статус:
+    int messageReadEnd ();                                  // сигнал о том, что прием сообщений завершен (возвращает номер сокета) статус:
 
 private slots:
     //template <typename retFormat>
-    //retFormat get_last_message (quint16 socket_num);        // получить последнее принятое сообщение от выбранного сокета         статус:
+    //retFormat getLastMessage (quint16 socket_num);        // получить последнее принятое сообщение от выбранного сокета         статус:
 
-    void socket_connected (quint8 num);                     // реация на соединения сокета                                          статус: готово
-    void socket_disconnected (quint8 num);                  // реакция на дисконнект сокета                                         статус: готово
+    void socketConnected (quint8 num);                      // реация на соединения сокета                                          статус: готово
+    void socketDisconnected (quint8 num);                   // реакция на дисконнект сокета                                         статус: готово
 public slots:
-    //void ready_read ();
+    //void readyRead ();
 
 
 public:
-    enum errors_code
+    enum errors_codes
     {
         send_error = 1,
         read_error
